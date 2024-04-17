@@ -59,7 +59,7 @@
 <audio id="graphMusic" src="GraphMusic.wav"></audio>
 
 
-<div class='panel' style='padding-top: 0px;'>
+<div id="firstPanel" class='panel' style='padding-top: 0px;'>
 
     <div id='text0' class='superlarge'>
 
@@ -323,8 +323,9 @@
         markers: false,
     });
 
+    // Initially make first panel visible
+    gsap.set("#firstPanel", { opacity: 1 });
 
-    gsap.to(".panel:first-child", {opacity: 1, duration: 0});
 
     gsap.utils.toArray(".panel").forEach((panel, i, panels) => {
         ScrollTrigger.create({
