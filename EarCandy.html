@@ -1,0 +1,387 @@
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vega@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@latest"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
+
+
+    <style>
+
+        body {
+            font-family: sans-serif;
+            overflow-x: hidden;
+        }
+
+        .superlarge {
+            font-size: 72px;
+            font-family: impact;
+        }
+
+        .larger {
+            font-family: impact;
+            font-size:36px;
+        }
+
+
+        @keyframes drawLine {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        path {
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 2000;
+            animation: drawLine 2s forwards;
+        }
+
+        .panel {
+            padding-top:400px;
+            padding-left:100px;
+            height: 50%;
+            width: 100%;
+            background-color: white;
+            opacity: 0;
+        }
+
+    </style>
+
+</head>
+<body>
+
+
+<audio id="soundEffect" src="stop.mp3"></audio>
+<audio id="graphMusic" src="GraphMusic.wav"></audio>
+
+
+<div class='panel' style='padding-top: 0px;'>
+
+    <div id='text0' class='superlarge'>
+
+        <img src='cow.webp' width=600 onclick="playCowSound()"><br>
+        Computer Science<br>is the cash cow of CSM!
+
+
+    </div>
+
+</div>
+
+<div class='panel' style='padding-top:600px'>
+
+    <div id='text1' class='larger'>
+        Student enrollment increased heavily over the years...
+    </div>
+
+    <div id='chart1'></div>
+
+    <div id='annotation1' class='larger' style='position: absolute; margin-left: 830px; margin-top: -560px;'><img class="dollar-sign" src='dollarz.png' style='width:50px;vertical-align: middle;'>11.9m tuition</div>
+
+</div>
+
+<div class='panel'>
+
+    <div id='text2' class='larger'>While faculty count stayed roughly the same!</div>
+
+    <div id='chart2'></div>
+
+    <div id='annotation2' class='larger' style='position: absolute; margin-left: 810px; margin-top: -580px;'><img class="dollar-sign" src='dollarz.png' style='width:50px;vertical-align: middle;'>2.95m salary</div>
+
+</div>
+
+
+<div class='panel'>
+
+    <div id='text3' class='larger'>This results in a huge discrepancy...<audio controls style='position: absolute; margin-left: 60px; margin-top: 5px;height: 30px'><source src="VoiceForGraph.mp3" type="audio/mpeg"></audio></div>
+
+    <div id='chart3'></div>
+
+    <div id='annotation3' class='larger' style='position: absolute; margin-left: 850px; margin-top: -530px;'>55.4%<br><br><br>&nbsp;&nbsp;&nbsp;vs<br><br><br>&nbsp;13.6%</div>
+
+    <div id='annotation4' class='larger' style='position: absolute; margin-left: 720px; margin-top: -190px;color:#ff7f0e'>Faculty</div>
+
+    <div id='annotation5' class='larger' style='position: absolute; margin-left: 620px; margin-top: -440px;color:#1f77b4'>Students</div>
+
+</div>
+
+<div class='panel' style='height:1000px'>
+
+    <div id='text4' class='superlarge'>...and we need to hire more faculty!</div>
+
+</div>
+
+
+<div id='scrollindicator'><img src='scroll.jpg' style='position:fixed;right:30px;bottom:30px;width:60px;opacity:0.5'></div>
+
+<script>
+
+    function playCowSound() {
+        var audio = new Audio('Cow-Charging-Up-Moo-A-www.fesliyanstudios.com.mp3');
+        audio.play();
+    }
+
+    function playVoiceSound() {
+        var audio = new Audio('VoiceForGraph.mp3');
+        audio.play();
+    }
+
+    const chart1View = document.querySelector('#chart1');
+    chart1View.addEventListener('click', (event, item) => {
+        const soundEffect = document.querySelector('#soundEffect');
+        soundEffect.play();
+    });
+
+
+
+    semesters = ['F17', 'Sp18', 'F18', 'Sp19', 'F19', 'Sp20', 'F20', 'Sp21', 'F21', 'Sp22', 'F22', 'Sp23', 'F23'];
+
+    chart1 = {
+        "width": 800,
+        "height": 400,
+        "data": {
+
+            "values": [{'semester': 'F17', 'students': 1085.0},
+                {'semester': 'Sp18', 'students': 1005.0},
+                {'semester': 'F18', 'students': 1145.0},
+                {'semester': 'Sp19', 'students': 1042.0},
+                {'semester': 'F19', 'students': 1171},
+                {'semester': 'Sp20', 'students': 1089.0},
+                {'semester': 'F20', 'students': 1192.0},
+                {'semester': 'Sp21', 'students': 1114.0},
+                {'semester': 'F21', 'students': 1237.0},
+                {'semester': 'Sp22', 'students': 1194.0},
+                {'semester': 'F22', 'students': 1490.0},
+                {'semester': 'Sp23', 'students': 1359.0},
+                {'semester': 'F23', 'students': 1686.0}]
+
+        },
+
+        "mark": {"type": "line", "strokeWidth":7 },
+
+        "encoding": {
+
+            "x": {"field": "semester",
+                "type": "ordinal",
+                "sort": semesters,
+                "axis": {"title": "Semester",
+                    "titleFontSize":24,
+                    "labelFontSize":24
+                }
+            },
+            "y": {"field": "students", "type":"quantitative",
+                "axis": {"title": "CS Student Count",
+                    "titleFontSize":24,
+                    "labelFontSize":24,
+                    "tickCount":5}},
+        }
+
+    };
+
+    chart2 = {
+        "width": 800,
+        "height": 400,
+        "data": {
+
+            "values": [{'semester': 'F17', 'faculty': 22},
+                {'semester': 'Sp18', 'faculty': 23},
+                {'semester': 'F18', 'faculty': 23},
+                {'semester': 'Sp19', 'faculty': 23},
+                {'semester': 'F19', 'faculty': 24},
+                {'semester': 'Sp20', 'faculty': 24},
+                {'semester': 'F20', 'faculty': 24},
+                {'semester': 'Sp21', 'faculty': 26},
+                {'semester': 'F21', 'faculty': 25},
+                {'semester': 'Sp22', 'faculty': 24},
+                {'semester': 'F22', 'faculty': 23},
+                {'semester': 'Sp23', 'faculty': 24},
+                {'semester': 'F23', 'faculty': 25}]
+
+        },
+
+        "mark": {"type": "line", "strokeWidth":7},
+
+        "encoding": {
+
+            "x": {"field": "semester",
+                "type": "ordinal",
+                "sort": semesters,
+                "axis": {"title": "Semester",
+                    "titleFontSize":24,
+                    "labelFontSize":24
+                }
+            },
+            "y": {"field": "faculty", "type":"quantitative",
+                "axis": {"title": "CS Faculty Count",
+                    "titleFontSize":24,
+                    "labelFontSize":24,
+                    "tickCount":5}},
+            "color": {"value":"#ff7f0e"}
+        }
+    }
+
+
+    chart3 = {
+        "width": 800,
+        "height": 400,
+        "data": {
+
+            "values": [{'semester': 'F17', 'faculty': 0.0, 'student': 0.0},
+                {'semester': 'Sp18',
+                    'faculty': 4.545454545454541,
+                    'student': -7.3732718894009235},
+                {'semester': 'F18',
+                    'faculty': 4.545454545454541,
+                    'student': 5.5299539170506895},
+                {'semester': 'Sp19',
+                    'faculty': 4.545454545454541,
+                    'student': -3.963133640552996},
+                {'semester': 'F19',
+                    'faculty': 9.090909090909083,
+                    'student': 7.926267281105992},
+                {'semester': 'Sp20',
+                    'faculty': 9.090909090909083,
+                    'student': 0.36866359447005337},
+                {'semester': 'F20',
+                    'faculty': 9.090909090909083,
+                    'student': 9.861751152073728},
+                {'semester': 'Sp21',
+                    'faculty': 18.181818181818187,
+                    'student': 2.6728110599078425},
+                {'semester': 'F21',
+                    'faculty': 13.636363636363647,
+                    'student': 14.009216589861762},
+                {'semester': 'Sp22',
+                    'faculty': 9.090909090909083,
+                    'student': 10.046082949308754},
+                {'semester': 'F22',
+                    'faculty': 4.545454545454541,
+                    'student': 37.32718894009217},
+                {'semester': 'Sp23',
+                    'faculty': 9.090909090909083,
+                    'student': 25.253456221198167},
+                {'semester': 'F23',
+                    'faculty': 13.636363636363647,
+                    'student': 55.39170506912443}]
+
+        },
+
+
+        "encoding": {
+
+            "x": {"field": "semester",
+                "type": "ordinal",
+                "sort": semesters,
+                "axis": {"title": "Semester",
+                    "titleFontSize":24,
+                    "labelFontSize":24}},
+            "y": {"axis": {"title": "% Change from F17",
+                    "titleFontSize":24,
+                    "labelFontSize":24,
+                    "tickCount":5}}
+        },
+        "layer": [
+            {
+                "mark": {"type": "line", "color":"#ff7f0e", "strokeWidth":7},
+                "encoding": {
+                    "y": {"field": "faculty", "type": "quantitative"}
+                }
+            },
+            {
+                "mark": {"type": "line", "strokeWidth":7},
+                "encoding": {
+                    "y": {"field": "student", "type": "quantitative"}
+                }
+            }
+        ]
+    }
+
+
+    vegaEmbed("#chart1", chart1, {actions: false, renderer: "svg"});
+
+    vegaEmbed("#chart2", chart2, {actions: false, renderer: "svg"});
+
+    vegaEmbed("#chart3", chart3, {actions: false, renderer: "svg"});
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Play background music when graph 2 starts drawing
+    ScrollTrigger.create({
+        trigger: "#chart2",
+        start: "top center",
+        onEnter: () => {
+            const backgroundMusic = document.getElementById('graphMusic');
+            backgroundMusic.play();
+        },
+        onLeaveBack: () => {
+            const backgroundMusic = document.getElementById('graphMusic');
+            backgroundMusic.pause();
+        },
+        markers: false,
+    });
+
+
+    gsap.to(".panel:first-child", {opacity: 1, duration: 0});
+
+    gsap.utils.toArray(".panel").forEach((panel, i, panels) => {
+        ScrollTrigger.create({
+            trigger: panel,
+            start: "top top",
+            end: "+=50%",
+            onEnter: function() {
+
+                gsap.to(panel, {opacity: 1, duration: 1});
+
+                // Animate annotations
+                gsap.fromTo(panel.querySelectorAll('.larger'), { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 2, stagger: 0.4 });
+
+                // Animate annotations
+                gsap.fromTo(
+                    panel.querySelectorAll('.dollar-sign'), // Select the dollar sign elements
+                    { opacity: 0, y: 30, scale: 0 }, // Initial properties
+                    { opacity: 1, y: 0, scale: 1, duration: 2, stagger: 0.4, ease: 'bounce' } // Target properties with bounce effect
+                );
+
+                // PPP = panel
+                paths = panel.querySelectorAll('svg .role-mark path');
+
+                console.log(paths)
+
+                for (var i=0; i<paths.length; i++) {
+
+                    p = paths[i];
+
+                    clonedP = p.cloneNode();
+                    parentE = p.parentElement;
+
+                    parentE.removeChild(p);
+                    parentE.appendChild(clonedP);
+
+                }
+
+            },
+            // onLeave: () => gsap.to(panel, {opacity: 0, duration: 1}),
+            onLeaveBack: () => gsap.to(panel, {opacity: 0, duration: 1}),
+            markers: false,
+        });
+    });
+
+
+    // Scroll back to top
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+    ScrollTrigger.create({
+        trigger: document.body,
+        start: "bottom bottom",
+        once: false,
+        onEnter: () => {
+            gsap.to(window, {duration: 2, scrollTo: {y: 10}});
+        }
+    });
+
+</script>
+</body>
+</html>
